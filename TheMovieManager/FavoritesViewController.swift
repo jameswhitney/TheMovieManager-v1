@@ -35,7 +35,7 @@ class FavoritesViewController: UIViewController {
     
     // MARK: Logout
     
-    func logout() {
+    @objc func logout() {
         dismiss(animated: true, completion: nil)
     }
 }
