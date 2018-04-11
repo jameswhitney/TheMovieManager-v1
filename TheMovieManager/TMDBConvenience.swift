@@ -76,14 +76,7 @@ extension TMDBClient {
         /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
         /* 2. Make the request */
         /* 3. Send the desired value(s) to completion handler */
-        
-        /*
-        
-        taskForGETMethod(method, parameters: parameters) { (results, error) in
-        
-        }
-        
-        */
+
     }
     
     private func loginWithToken(_ requestToken: String?, hostViewController: UIViewController, completionHandlerForLogin: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
