@@ -33,7 +33,48 @@ class TMDBClient : NSObject {
 
     // MARK: GET
     
-    //func taskForGETMethod(_ method: String, parameters: [String:AnyObject], completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {}
+    func taskForGETMethod(_ method: String, parameters: [String:AnyObject], completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
+        
+        // Set parameters
+        var parametersWithApiKey = parameters
+        parametersWithApiKey[ParameterKeys.ApiKey] = Constants.ApiKey as AnyObject?
+        
+        // Build URL and configure request
+        let request = NSMutableURLRequest(url: TMDBClient.tmdbURLFromParameters(parametersWithApiKey, withPathExtension: method))
+        
+        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
+            
+            func sendError(_ error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGET(nil, NSError(domain: "taskForGetMethod", code: 1, userInfo: userInfo))
+            }
+            
+            // Check for error in request
+            guard (error == nil) else {
+                sendError("Request returned an error: \(error!)")
+                return
+            }
+            
+            // Check for successful response in 2xx range
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                sendError("Status code 2xx not returned.")
+                return
+            }
+            
+            guard let data = data else {
+                sendError("No data was returned")
+                return
+            }
+            self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForGET)
+        }
+        
+        // Start request
+        task.resume()
+        
+        return task
+        
+    }
     
     // MARK: POST
     
