@@ -37,7 +37,7 @@ class TMDBClient : NSObject {
         
         // Set parameters
         var parametersWithApiKey = parameters
-        parametersWithApiKey[ParameterKeys.ApiKey] = Constants.ApiKey as AnyObject?
+        parametersWithApiKey[ParameterKeys.ApiKey] = Constants.ApiKey as AnyObject? 
         
         // Build URL and configure request
         let request = NSMutableURLRequest(url: TMDBClient.tmdbURLFromParameters(parametersWithApiKey, withPathExtension: method))
