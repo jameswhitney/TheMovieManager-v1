@@ -53,4 +53,20 @@ class TMDBAuthViewController: UIViewController {
 extension TMDBAuthViewController: UIWebViewDelegate {
     
     // TODO: Add implementation here
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        
+        // After user login, redirect user back to auth url
+        if webView.request!.url!.absoluteString.contains(TMDBClient.Constants.AccountURL) {
+            if let urlRequest = urlRequest {
+                webView.loadRequest(urlRequest)
+            }
+        }
+        
+        if webView.request!.url!.absoluteString == "\(TMDBClient.Constants.AuthorizationURL)\(requestToken!)/allow" {
+            
+            dismiss(animated: true) {
+                self.completionHandlerForView!(true, nil)
+            }
+        }
+    }
 }
